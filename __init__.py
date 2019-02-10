@@ -44,12 +44,13 @@ class AppLauncherSkill(MycroftSkill):
         usr = who.decode("utf-8").split(" ")[0]
         self.user = usr
 
-    @intent_handler(IntentBuilder("").require("Open"))
-    def handle_open_intent(self, message):
+    @intent_handler(IntentBuilder("").require("AppLauncherOpen"))
+    def handle_applauncher_open_intent(self, message):
         try:
             self.getUser()
+            cmd = message.data.get('AppLauncherOpen')
             msg = message.data.get('utterance')
-            self.app = str(msg).split(" ")[1]
+            self.app = str(msg).replace(cmd+" ", "", 1)
             exists = subprocess.Popen("command -v {}".format(self.app),
                                       stdout=subprocess.PIPE,
                                       shell=True).stdout.read()
@@ -61,19 +62,20 @@ class AppLauncherSkill(MycroftSkill):
             else:
                 self.speak_dialog("app.not.exists", data={"app": self.app})
         except Exception as e:
-            LOG.exception("open command failed")
-            self.speak_dialog(e.message)
+            LOG.exception("AppLauncherOpen Error: " + e.message)
+            self.speak_dialog("app.error")
 
-    @intent_handler(IntentBuilder("").require("Close"))
-    def handle_close_intent(self, message):
+    @intent_handler(IntentBuilder("").require("AppLauncherClose"))
+    def handle_applauncher_close_intent(self, message):
         try:
+            cmd = message.data.get('AppLauncherClose')
             msg = message.data.get('utterance')
-            self.app = str(msg).split(" ")[1]
+            self.app = str(msg).replace(cmd+" ", "", 1)
             subprocess.call("killall {}".format(self.app), shell=True)
             self.speak_dialog("app.close", data={"app": self.app})
         except Exception as e:
-            LOG.exception("close command failed")
-            self.speak_dialog(e.message)
+            LOG.exception("AppLauncherClose Error: " + e.message)
+            self.speak_dialog("app.error")
 
 
 def create_skill():

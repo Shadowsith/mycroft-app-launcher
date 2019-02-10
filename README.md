@@ -9,16 +9,22 @@ ony uses subprocesses to open/close programs. It also gives you a message if a
 application is not found on the device.
 
 ## Examples 
-* "Open firefox"
-* "Launch thunderbird"
-* "Close firefox"
-* "Exit thunderbird"
+* "App open firefox"
+* "Program open firefox"
+* "App launch thunderbird"
+* "App close firefox"
+* "App exit thunderbird"
+* "Program close chromium"
 
 ## Installation
 Clone this repository into /opt/mycroft/skills and restart the mycroft service
 
 ## Tested on
 * Arch (Manjaro Linux)
+
+## TODO
+* Check if a process with app launches before killing
+* User can allow/deny if a app can be opened twice
 
 ## Issues
 * Dolphin filemanager does not open
